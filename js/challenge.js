@@ -2,17 +2,60 @@ let counter = document.querySelector('#counter')
 let minus = document.querySelector('#minus')
 let plus = document.querySelector('#plus')
 let heart = document.querySelector('#heart')
-let pause = document.querySelector('#pause')
+let intervalButton = document.querySelector('#pause')
 let commentForm = document.querySelector('#comment-form')
 let commentInput = document.querySelector('#comment-input')
 let likesList = document.querySelector('.likes')
+let likedNumbers = {}
+let counterEvent = setInterval(() => {counter.textContent = parseInt(counter.textContent) + 1}, 1000)
 
-let counterEvent = () => {
-    setInterval(() => {
-        counter.textContent = parseInt(counter.textContent) + 1
-    }, 1000)
+let controlInterval = () => {
+    if (intervalButton.textContent === ' pause ') {
+        console.log('paused')
+        clearInterval(counterEvent)
+        intervalButton.textContent = ' resume '
+        disableListeners()
+    } else if (intervalButton.textContent === ' resume ') {
+        console.log('resumed')
+        counterEvent = setInterval(() => {counter.textContent = parseInt(counter.textContent) + 1}, 1000)
+        intervalButton.textContent = ' pause '
+        enableListeners()
+    }
+}
+
+let addListeners = () => {
+    minus.addEventListener('click', () => counter.textContent = parseInt(counter.textContent) - 1)
+    plus.addEventListener('click', () => counter.textContent = parseInt(counter.textContent) + 1)
+    heart.addEventListener('click', () => {    
+        let target = parseInt(counter.textContent)
+        let foundLi = document.getElementById(target)
+        if (foundLi) {
+            likedNumbers[target] ++
+            foundLi.textContent = `You liked ${target} ${likedNumbers[target]} times`
+        } else {
+            likedNumbers[target] = 1
+            let li = document.createElement('li')
+            li.id = target
+            li.textContent = `You liked ${target} ${likedNumbers[target]} time.`
+            likesList.append(li)
+        }
+    })
+}
+
+let enableListeners = () => {
+    minus.disabled = false
+    plus.disabled = false
+    heart.disabled = false
+}
+
+let disableListeners = () => {
+    minus.disabled = true
+    plus.disabled = true
+    heart.disabled = true
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    counterEvent()
+    counterEvent
+    intervalButton.addEventListener('click', controlInterval)
+    addListeners()
 })
