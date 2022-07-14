@@ -5,17 +5,18 @@ let heart = document.querySelector('#heart')
 let intervalButton = document.querySelector('#pause')
 let commentForm = document.querySelector('#comment-form')
 let commentInput = document.querySelector('#comment-input')
-let commentList = document.querySelector('.comments')
 let likesList = document.querySelector('.likes')
 let likedNumbers = {}
 let counterEvent = setInterval(() => {counter.textContent = parseInt(counter.textContent) + 1}, 1000)
 
 let controlInterval = () => {
     if (intervalButton.textContent === ' pause ') {
+        console.log('paused')
         clearInterval(counterEvent)
         intervalButton.textContent = ' resume '
         disableListeners()
     } else if (intervalButton.textContent === ' resume ') {
+        console.log('resumed')
         counterEvent = setInterval(() => {counter.textContent = parseInt(counter.textContent) + 1}, 1000)
         intervalButton.textContent = ' pause '
         enableListeners()
@@ -53,23 +54,8 @@ let disableListeners = () => {
     heart.disabled = true
 }
 
-let deleteComment = (e) => {
-    e.target.parentElement.remove()
-}
-
-let submitComment = (e) => {
-    e.preventDefault()
-    let li = document.createElement('li')
-    let button = document.createElement('button')
-    li.textContent = commentInput.value
-    button.textContent = 'X'
-    button.addEventListener('click', deleteComment)
-    li.append(button)
-    commentList.append(li)
-}
-
 document.addEventListener('DOMContentLoaded', () => {
+    counterEvent
     intervalButton.addEventListener('click', controlInterval)
-    commentForm.addEventListener('submit', submitComment)
     addListeners()
 })
