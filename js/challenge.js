@@ -1,4 +1,4 @@
-let counter = document.querySelector('#counter')
+counter = document.querySelector('#counter')
 let minus = document.querySelector('#minus')
 let plus = document.querySelector('#plus')
 let heart = document.querySelector('#heart')
